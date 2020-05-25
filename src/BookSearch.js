@@ -22,24 +22,33 @@ class BookSearch extends Component {
         }))
         if (query.trim().length) {
             BooksAPI.search(query).then((result) => {
+                if (result.length) {
 
-                const showingBooks = this.props.books
-                // const currentlyReading = showingBooks.filter(book => book.shelf === 'currentlyReading')
-                // const wantToRead = showingBooks.filter(book => book.shelf === 'wantToRead')
-                // const read = showingBooks.filter(book => book.shelf === 'read')
+                    const showingBooks = this.props.books
+                    // const currentlyReading = showingBooks.filter(book => book.shelf === 'currentlyReading')
+                    // const wantToRead = showingBooks.filter(book => book.shelf === 'wantToRead')
+                    // const read = showingBooks.filter(book => book.shelf === 'read')
 
-                const resultBooks = result.map(
-                    resultBook => {
-                        const book = showingBooks.find(showingBook => showingBook.id === resultBook.id)
-                        book ? resultBook.shelf = book.shelf : resultBook.shelf = 'none'
+                    const resultBooks = result.map(
+                        resultBook => {
+                            const book = showingBooks.find(showingBook => showingBook.id === resultBook.id)
+                            book ? resultBook.shelf = book.shelf : resultBook.shelf = 'none'
 
-                        return resultBook;
-                    })
-                this.setState(() =>
-                    (
-                        { searchedBooks: resultBooks }
+                            return resultBook;
+                        })
+                    this.setState(() =>
+                        (
+                            { searchedBooks: resultBooks }
+                        )
                     )
-                )
+                }
+                else {
+                    this.setState(() =>
+                        (
+                            { searchedBooks: [] }
+                        )
+                    )
+                }
             }).catch((error) => {
                 query = '';
                 console.log(error)
