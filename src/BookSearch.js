@@ -18,19 +18,17 @@ class BookSearch extends Component {
 
     updateQuery = (query) => {
         this.setState(() => ({
-            query: query.trim()
+            query: query
         }))
-        if (query.length) {
+        if (query.trim().length) {
             BooksAPI.search(query).then((result) => {
 
                 const showingBooks = this.props.books
-                const currentlyReading = showingBooks.filter(book => book.shelf === 'currentlyReading')
-
+                
                 const resultBooks = result.map(
                     resultBook => {
-                        const book = showingBooks.find(showingBook => showingBook.id === resultBook.id) !== book
-                            ? currentlyReading
-                            : resultBook.shelf = 'none'
+                        const book = showingBooks.find(showingBook => showingBook.id === resultBook.id)
+                            book ? resultBook.shelf = book.shelf:resultBook.shelf = 'none'
 
                         return resultBook;
                     })
@@ -39,6 +37,8 @@ class BookSearch extends Component {
                         { searchedBooks: resultBooks }
                     )
                 )
+            }).catch((error) => {
+                console.log(error)
             });
         }
     }
@@ -77,7 +77,7 @@ class BookSearch extends Component {
                             <li key={book.id}>
                                 <div className="book">
                                     <div className="book-top">
-                                        <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${book.imageLinks.thumbnail})` }}></div>
+                                        <div className="book-cover" style={{ width: 128, height: 193, backgroundImage: `url(${book.imageLinks && book.imageLinks.thumbnail ? book.imageLinks.thumbnail:"" })` }}></div>
                                         <div className="book-shelf-changer">
                                             <select value={book.shelf} onChange={(event) => onChangeShelf(event, book)}>
                                                 <option value="move" disable="true">Move to...</option>
